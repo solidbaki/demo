@@ -17,6 +17,7 @@ public class StudentService {
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
+
     @GetMapping
     public List<Student> getStudents() {
         return studentRepository.findAll();
@@ -27,7 +28,15 @@ public class StudentService {
         if (studentOptional.isPresent()) {
             throw new IllegalStateException("email taken");
         }
-    studentRepository.save(student);
+        studentRepository.save(student);
         System.out.println(student);
+    }
+
+    public void deleteStudent(Long studentId) {
+        boolean exists = studentRepository.existsById(studentId);
+        if (!exists) {
+            throw new IllegalStateException("student with id " + studentId + " does not exist");
+        }
+        studentRepository.deleteById(studentId);
     }
 }
